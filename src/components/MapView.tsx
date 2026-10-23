@@ -1,5 +1,5 @@
-import React, { useRef, useEffect, useCallback } from 'react';
-import { StyleSheet, View, NativeSyntheticEvent } from 'react-native';
+import React, { useRef, useEffect, useCallback, useMemo } from 'react';
+import { StyleSheet, View, NativeSyntheticEvent, Text, TouchableOpacity } from 'react-native';
 import {
   Map as MapLibreMap,
   Camera,
@@ -9,7 +9,7 @@ import {
   ViewStateChangeEvent,
 } from '@maplibre/maplibre-react-native';
 import { Location, Waypoint, Route } from '../types';
-import { MAP_STYLES, NAVIGATION_CONFIG } from '../constants';
+import { MAP_STYLES, NAVIGATION_CONFIG, ROUTE_COLORS, ROUTE_LINE_STYLE, WAYPOINT_COLORS } from '../constants';
 
 type LngLat = [number, number];
 type LngLatBounds = [number, number, number, number];
@@ -25,19 +25,25 @@ interface MapViewProps {
   location: Location | null;
   waypoints: Waypoint[];
   route: Route | null;
+  alternativeRoute: Route | null;
   followUser: boolean;
   mapStyle?: string;
+  showRoute: boolean;
+  showWaypoints: boolean;
   onMapPress?: (latitude: number, longitude: number) => void;
   onMarkerPress?: (waypoint: Waypoint) => void;
-  onViewStateChange?: (viewState: { zoom: number }) => void;
+  onViewStateChange?: (viewState: { zoom: number; pitch: number; bearing: number }) => void;
 }
 
 export function MapView({
   location,
   waypoints,
   route,
+  alternativeRoute,
   followUser,
   mapStyle = MAP_STYLES.streets,
+  showRoute = true,
+  showWaypoints = true,
   onMapPress,
   onMarkerPress,
   onViewStateChange,
@@ -51,6 +57,7 @@ export function MapView({
       cameraRef.current?.flyTo({
         center: [location.longitude, location.latitude] as LngLat,
         zoom: NAVIGATION_CONFIG.mapFollowZoom,
+        pitch: NAVIGATION_CONFIG.mapTiltAngle,
         duration: 500,
       });
     }
@@ -68,7 +75,9 @@ export function MapView({
       const maxLon = Math.max(...lons);
 
       const bounds: LngLatBounds = [minLon, minLat, maxLon, maxLat];
-      cameraRef.current?.fitBounds(bounds, { padding: { top: 200, right: 50, bottom: 200, left: 50 } });
+      cameraRef.current?.fitBounds(bounds, {
+        padding: { top: 150, right: 50, bottom: 150, left: 50 },
+      });
     }
   }, [route]);
 
@@ -82,7 +91,11 @@ export function MapView({
 
   const handleRegionChange = useCallback(
     (event: ViewStateChangeEvent) => {
-      onViewStateChange?.({ zoom: event.zoom });
+      onViewStateChange?.({
+        zoom: event.zoom,
+        pitch: event.pitch || 0,
+        bearing: event.bearing || 0,
+      });
     },
     [onViewStateChange]
   );
@@ -104,17 +117,12 @@ export function MapView({
         dragPan
         touchZoom
         doubleTapZoom
-        onDidFailLoadingMap={(e: any) => {
-          console.warn('Map failed to load:', e);
-        }}
-        onDidFinishLoadingMap={() => {
-          console.log('Map loaded successfully');
-        }}
       >
         <Camera
           ref={cameraRef}
           trackUserLocation={followUser ? 'default' : undefined}
           zoom={NAVIGATION_CONFIG.mapFollowZoom}
+          pitch={followUser ? NAVIGATION_CONFIG.mapTiltAngle : 0}
         />
 
         <UserLocation />
