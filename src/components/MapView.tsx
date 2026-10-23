@@ -1,5 +1,5 @@
 import React, { useRef, useEffect, useCallback, useMemo } from 'react';
-import { StyleSheet, View, NativeSyntheticEvent, Text, TouchableOpacity } from 'react-native';
+import { StyleSheet, View, NativeSyntheticEvent } from 'react-native';
 import {
   Map as MapLibreMap,
   Camera,
@@ -9,7 +9,17 @@ import {
   ViewStateChangeEvent,
 } from '@maplibre/maplibre-react-native';
 import { Location, Waypoint, Route } from '../types';
-import { MAP_STYLES, NAVIGATION_CONFIG, ROUTE_COLORS, ROUTE_LINE_STYLE, WAYPOINT_COLORS } from '../constants';
+import {
+  MAP_STYLES,
+  NAVIGATION_CONFIG,
+  ROUTE_COLORS,
+  ROUTE_LINE_STYLE,
+  resolveMapStyle,
+} from '../constants';
+import {
+  CUSTOM_MAP_STYLES,
+  CustomMapStyleKey,
+} from '../constants/customMapStyles';
 
 type LngLat = [number, number];
 type LngLatBounds = [number, number, number, number];
@@ -27,7 +37,7 @@ interface MapViewProps {
   route: Route | null;
   alternativeRoute: Route | null;
   followUser: boolean;
-  mapStyle?: string;
+  mapStyle?: string | object;
   showRoute: boolean;
   showWaypoints: boolean;
   onMapPress?: (latitude: number, longitude: number) => void;
@@ -51,6 +61,18 @@ export function MapView({
   const mapRef = useRef<MapRef>(null);
   const cameraRef = useRef<CameraRef>(null);
   const lastFollowRef = useRef<boolean>(followUser);
+
+  // Resolve map style - handles both URL strings and custom style objects
+  const resolvedMapStyle = useMemo(() => {
+    if (typeof mapStyle === 'object') return mapStyle as any;
+    // Check if it's a custom style key
+    const customStyleKeys = Object.keys(CUSTOM_MAP_STYLES) as CustomMapStyleKey[];
+    if (customStyleKeys.includes(mapStyle as CustomMapStyleKey)) {
+      return CUSTOM_MAP_STYLES[mapStyle as CustomMapStyleKey] as any;
+    }
+    // Return URL string
+    return mapStyle;
+  }, [mapStyle]);
 
   useEffect(() => {
     if (followUser && location && !lastFollowRef.current) {
@@ -105,7 +127,7 @@ export function MapView({
       <MapLibreMap
         ref={mapRef}
         style={styles.map}
-        mapStyle={mapStyle}
+        mapStyle={resolvedMapStyle}
         onPress={handlePress as any}
         onRegionDidChange={handleRegionChange as any}
         compass
