@@ -2,13 +2,14 @@
 // Based on MapLibre Style Specification v8
 // Uses OpenFreeMap vector tiles (OpenMapTiles schema)
 
+const GLYPHS = 'https://tiles.openfreemap.org/fonts/{fontstack}/{range}.pbf';
+
+// OpenFreeMap TileJSON - provides correct tile URLs automatically
 const VECTOR_SOURCE = {
   type: 'vector',
-  tiles: ['https://tiles.openfreemap.org/planet/{z}/{x}/{y}.pbf'],
+  url: 'https://tiles.openfreemap.org/planet',
   attribution: '© OpenStreetMap contributors',
 } as const;
-
-const GLYPHS = 'https://tiles.openfreemap.org/fonts/{fontstack}/{range}.pbf';
 
 export const CUSTOM_MAP_STYLES = {
   losSantos: {
