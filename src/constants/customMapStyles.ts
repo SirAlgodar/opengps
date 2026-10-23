@@ -1,17 +1,22 @@
 // Custom MapLibre style definitions for themed maps
 // Based on MapLibre Style Specification v8
+// Uses OpenFreeMap vector tiles (OpenMapTiles schema)
+
+const VECTOR_SOURCE = {
+  type: 'vector',
+  tiles: ['https://tiles.openfreemap.org/planet/{z}/{x}/{y}.pbf'],
+  attribution: '© OpenStreetMap contributors',
+} as const;
+
+const GLYPHS = 'https://tiles.openfreemap.org/fonts/{fontstack}/{range}.pbf';
 
 export const CUSTOM_MAP_STYLES = {
   losSantos: {
     version: 8,
     name: 'Los Santos',
+    glyphs: GLYPHS,
     sources: {
-      'osm-tiles': {
-        type: 'raster',
-        tiles: ['https://tiles.openfreemap.org/planet/{z}/{x}/{y}.pbf'],
-        tileSize: 256,
-        attribution: '© OpenStreetMap contributors',
-      },
+      'openmaptiles': VECTOR_SOURCE,
     },
     layers: [
       {
@@ -24,7 +29,7 @@ export const CUSTOM_MAP_STYLES = {
       {
         id: 'water',
         type: 'fill',
-        source: 'osm-tiles',
+        source: 'openmaptiles',
         'source-layer': 'water',
         paint: {
           'fill-color': '#1a3a4a',
@@ -33,7 +38,7 @@ export const CUSTOM_MAP_STYLES = {
       {
         id: 'parks',
         type: 'fill',
-        source: 'osm-tiles',
+        source: 'openmaptiles',
         'source-layer': 'park',
         paint: {
           'fill-color': '#3d6b2e',
@@ -42,7 +47,7 @@ export const CUSTOM_MAP_STYLES = {
       {
         id: 'roads-bg',
         type: 'line',
-        source: 'osm-tiles',
+        source: 'openmaptiles',
         'source-layer': 'transportation',
         paint: {
           'line-color': '#4a4a4a',
@@ -52,7 +57,7 @@ export const CUSTOM_MAP_STYLES = {
       {
         id: 'roads',
         type: 'line',
-        source: 'osm-tiles',
+        source: 'openmaptiles',
         'source-layer': 'transportation',
         paint: {
           'line-color': '#8b7355',
@@ -62,7 +67,7 @@ export const CUSTOM_MAP_STYLES = {
       {
         id: 'buildings',
         type: 'fill',
-        source: 'osm-tiles',
+        source: 'openmaptiles',
         'source-layer': 'building',
         paint: {
           'fill-color': '#3a3a2a',
@@ -72,11 +77,11 @@ export const CUSTOM_MAP_STYLES = {
       {
         id: 'labels',
         type: 'symbol',
-        source: 'osm-tiles',
+        source: 'openmaptiles',
         'source-layer': 'place',
         layout: {
           'text-field': '{name}',
-          'text-font': ['Open Sans Regular'],
+          'text-font': ['Noto Sans Regular'],
           'text-size': 14,
         },
         paint: {
@@ -91,13 +96,9 @@ export const CUSTOM_MAP_STYLES = {
   pipBoy: {
     version: 8,
     name: 'Pip-Boy',
+    glyphs: GLYPHS,
     sources: {
-      'osm-tiles': {
-        type: 'raster',
-        tiles: ['https://tiles.openfreemap.org/planet/{z}/{x}/{y}.pbf'],
-        tileSize: 256,
-        attribution: '© OpenStreetMap contributors',
-      },
+      'openmaptiles': VECTOR_SOURCE,
     },
     layers: [
       {
@@ -110,7 +111,7 @@ export const CUSTOM_MAP_STYLES = {
       {
         id: 'water',
         type: 'fill',
-        source: 'osm-tiles',
+        source: 'openmaptiles',
         'source-layer': 'water',
         paint: {
           'fill-color': '#0a2a1a',
@@ -119,7 +120,7 @@ export const CUSTOM_MAP_STYLES = {
       {
         id: 'parks',
         type: 'fill',
-        source: 'osm-tiles',
+        source: 'openmaptiles',
         'source-layer': 'park',
         paint: {
           'fill-color': '#0f2a0f',
@@ -128,7 +129,7 @@ export const CUSTOM_MAP_STYLES = {
       {
         id: 'roads-bg',
         type: 'line',
-        source: 'osm-tiles',
+        source: 'openmaptiles',
         'source-layer': 'transportation',
         paint: {
           'line-color': '#1a4a1a',
@@ -138,7 +139,7 @@ export const CUSTOM_MAP_STYLES = {
       {
         id: 'roads',
         type: 'line',
-        source: 'osm-tiles',
+        source: 'openmaptiles',
         'source-layer': 'transportation',
         paint: {
           'line-color': '#33ff33',
@@ -149,7 +150,7 @@ export const CUSTOM_MAP_STYLES = {
       {
         id: 'buildings',
         type: 'fill',
-        source: 'osm-tiles',
+        source: 'openmaptiles',
         'source-layer': 'building',
         paint: {
           'fill-color': '#0a2a0a',
@@ -160,11 +161,11 @@ export const CUSTOM_MAP_STYLES = {
       {
         id: 'labels',
         type: 'symbol',
-        source: 'osm-tiles',
+        source: 'openmaptiles',
         'source-layer': 'place',
         layout: {
           'text-field': '{name}',
-          'text-font': ['Open Sans Regular'],
+          'text-font': ['Noto Sans Regular'],
           'text-size': 13,
           'text-transform': 'uppercase',
         },
@@ -181,13 +182,9 @@ export const CUSTOM_MAP_STYLES = {
   pixelMap: {
     version: 8,
     name: 'Pixel Map',
+    glyphs: GLYPHS,
     sources: {
-      'osm-tiles': {
-        type: 'raster',
-        tiles: ['https://tiles.openfreemap.org/planet/{z}/{x}/{y}.pbf'],
-        tileSize: 256,
-        attribution: '© OpenStreetMap contributors',
-      },
+      'openmaptiles': VECTOR_SOURCE,
     },
     layers: [
       {
@@ -200,7 +197,7 @@ export const CUSTOM_MAP_STYLES = {
       {
         id: 'water',
         type: 'fill',
-        source: 'osm-tiles',
+        source: 'openmaptiles',
         'source-layer': 'water',
         paint: {
           'fill-color': '#3d2b6b',
@@ -209,7 +206,7 @@ export const CUSTOM_MAP_STYLES = {
       {
         id: 'parks',
         type: 'fill',
-        source: 'osm-tiles',
+        source: 'openmaptiles',
         'source-layer': 'park',
         paint: {
           'fill-color': '#2d5a2d',
@@ -218,29 +215,27 @@ export const CUSTOM_MAP_STYLES = {
       {
         id: 'roads-bg',
         type: 'line',
-        source: 'osm-tiles',
+        source: 'openmaptiles',
         'source-layer': 'transportation',
         paint: {
           'line-color': '#4a2b6b',
           'line-width': 10,
-          'line-dasharray': [2, 2],
         },
       },
       {
         id: 'roads',
         type: 'line',
-        source: 'osm-tiles',
+        source: 'openmaptiles',
         'source-layer': 'transportation',
         paint: {
           'line-color': '#ff6b9d',
           'line-width': 8,
-          'line-dasharray': [3, 3],
         },
       },
       {
         id: 'buildings',
         type: 'fill',
-        source: 'osm-tiles',
+        source: 'openmaptiles',
         'source-layer': 'building',
         paint: {
           'fill-color': '#4a2b6b',
@@ -250,11 +245,11 @@ export const CUSTOM_MAP_STYLES = {
       {
         id: 'labels',
         type: 'symbol',
-        source: 'osm-tiles',
+        source: 'openmaptiles',
         'source-layer': 'place',
         layout: {
           'text-field': '{name}',
-          'text-font': ['Open Sans Bold'],
+          'text-font': ['Noto Sans Bold'],
           'text-size': 14,
           'text-transform': 'uppercase',
         },
@@ -270,13 +265,9 @@ export const CUSTOM_MAP_STYLES = {
   cyberpunk: {
     version: 8,
     name: 'Cyberpunk',
+    glyphs: GLYPHS,
     sources: {
-      'osm-tiles': {
-        type: 'raster',
-        tiles: ['https://tiles.openfreemap.org/planet/{z}/{x}/{y}.pbf'],
-        tileSize: 256,
-        attribution: '© OpenStreetMap contributors',
-      },
+      'openmaptiles': VECTOR_SOURCE,
     },
     layers: [
       {
@@ -289,7 +280,7 @@ export const CUSTOM_MAP_STYLES = {
       {
         id: 'water',
         type: 'fill',
-        source: 'osm-tiles',
+        source: 'openmaptiles',
         'source-layer': 'water',
         paint: {
           'fill-color': '#0a1a3a',
@@ -298,7 +289,7 @@ export const CUSTOM_MAP_STYLES = {
       {
         id: 'parks',
         type: 'fill',
-        source: 'osm-tiles',
+        source: 'openmaptiles',
         'source-layer': 'park',
         paint: {
           'fill-color': '#1a0a2a',
@@ -307,7 +298,7 @@ export const CUSTOM_MAP_STYLES = {
       {
         id: 'roads-bg',
         type: 'line',
-        source: 'osm-tiles',
+        source: 'openmaptiles',
         'source-layer': 'transportation',
         paint: {
           'line-color': '#2a1a4a',
@@ -317,7 +308,7 @@ export const CUSTOM_MAP_STYLES = {
       {
         id: 'roads',
         type: 'line',
-        source: 'osm-tiles',
+        source: 'openmaptiles',
         'source-layer': 'transportation',
         paint: {
           'line-color': '#00ffff',
@@ -328,7 +319,7 @@ export const CUSTOM_MAP_STYLES = {
       {
         id: 'buildings',
         type: 'fill',
-        source: 'osm-tiles',
+        source: 'openmaptiles',
         'source-layer': 'building',
         paint: {
           'fill-color': '#1a0a3a',
@@ -339,11 +330,11 @@ export const CUSTOM_MAP_STYLES = {
       {
         id: 'labels',
         type: 'symbol',
-        source: 'osm-tiles',
+        source: 'openmaptiles',
         'source-layer': 'place',
         layout: {
           'text-field': '{name}',
-          'text-font': ['Open Sans Bold'],
+          'text-font': ['Noto Sans Bold'],
           'text-size': 13,
           'text-transform': 'uppercase',
         },
@@ -359,13 +350,9 @@ export const CUSTOM_MAP_STYLES = {
   retro: {
     version: 8,
     name: 'Retro',
+    glyphs: GLYPHS,
     sources: {
-      'osm-tiles': {
-        type: 'raster',
-        tiles: ['https://tiles.openfreemap.org/planet/{z}/{x}/{y}.pbf'],
-        tileSize: 256,
-        attribution: '© OpenStreetMap contributors',
-      },
+      'openmaptiles': VECTOR_SOURCE,
     },
     layers: [
       {
@@ -378,7 +365,7 @@ export const CUSTOM_MAP_STYLES = {
       {
         id: 'water',
         type: 'fill',
-        source: 'osm-tiles',
+        source: 'openmaptiles',
         'source-layer': 'water',
         paint: {
           'fill-color': '#7ba4c7',
@@ -387,7 +374,7 @@ export const CUSTOM_MAP_STYLES = {
       {
         id: 'parks',
         type: 'fill',
-        source: 'osm-tiles',
+        source: 'openmaptiles',
         'source-layer': 'park',
         paint: {
           'fill-color': '#8fbc8f',
@@ -396,7 +383,7 @@ export const CUSTOM_MAP_STYLES = {
       {
         id: 'roads-bg',
         type: 'line',
-        source: 'osm-tiles',
+        source: 'openmaptiles',
         'source-layer': 'transportation',
         paint: {
           'line-color': '#c4a77d',
@@ -406,7 +393,7 @@ export const CUSTOM_MAP_STYLES = {
       {
         id: 'roads',
         type: 'line',
-        source: 'osm-tiles',
+        source: 'openmaptiles',
         'source-layer': 'transportation',
         paint: {
           'line-color': '#8b4513',
@@ -416,7 +403,7 @@ export const CUSTOM_MAP_STYLES = {
       {
         id: 'buildings',
         type: 'fill',
-        source: 'osm-tiles',
+        source: 'openmaptiles',
         'source-layer': 'building',
         paint: {
           'fill-color': '#deb887',
@@ -426,11 +413,11 @@ export const CUSTOM_MAP_STYLES = {
       {
         id: 'labels',
         type: 'symbol',
-        source: 'osm-tiles',
+        source: 'openmaptiles',
         'source-layer': 'place',
         layout: {
           'text-field': '{name}',
-          'text-font': ['Open Sans Bold'],
+          'text-font': ['Noto Sans Bold'],
           'text-size': 14,
         },
         paint: {
@@ -445,13 +432,9 @@ export const CUSTOM_MAP_STYLES = {
   ocean: {
     version: 8,
     name: 'Ocean',
+    glyphs: GLYPHS,
     sources: {
-      'osm-tiles': {
-        type: 'raster',
-        tiles: ['https://tiles.openfreemap.org/planet/{z}/{x}/{y}.pbf'],
-        tileSize: 256,
-        attribution: '© OpenStreetMap contributors',
-      },
+      'openmaptiles': VECTOR_SOURCE,
     },
     layers: [
       {
@@ -464,7 +447,7 @@ export const CUSTOM_MAP_STYLES = {
       {
         id: 'water',
         type: 'fill',
-        source: 'osm-tiles',
+        source: 'openmaptiles',
         'source-layer': 'water',
         paint: {
           'fill-color': '#1a4a7a',
@@ -473,7 +456,7 @@ export const CUSTOM_MAP_STYLES = {
       {
         id: 'parks',
         type: 'fill',
-        source: 'osm-tiles',
+        source: 'openmaptiles',
         'source-layer': 'park',
         paint: {
           'fill-color': '#1a5a4a',
@@ -482,7 +465,7 @@ export const CUSTOM_MAP_STYLES = {
       {
         id: 'roads-bg',
         type: 'line',
-        source: 'osm-tiles',
+        source: 'openmaptiles',
         'source-layer': 'transportation',
         paint: {
           'line-color': '#2a4a6a',
@@ -492,7 +475,7 @@ export const CUSTOM_MAP_STYLES = {
       {
         id: 'roads',
         type: 'line',
-        source: 'osm-tiles',
+        source: 'openmaptiles',
         'source-layer': 'transportation',
         paint: {
           'line-color': '#4a8ab0',
@@ -502,7 +485,7 @@ export const CUSTOM_MAP_STYLES = {
       {
         id: 'buildings',
         type: 'fill',
-        source: 'osm-tiles',
+        source: 'openmaptiles',
         'source-layer': 'building',
         paint: {
           'fill-color': '#1a3a5a',
@@ -512,11 +495,11 @@ export const CUSTOM_MAP_STYLES = {
       {
         id: 'labels',
         type: 'symbol',
-        source: 'osm-tiles',
+        source: 'openmaptiles',
         'source-layer': 'place',
         layout: {
           'text-field': '{name}',
-          'text-font': ['Open Sans Regular'],
+          'text-font': ['Noto Sans Regular'],
           'text-size': 13,
         },
         paint: {

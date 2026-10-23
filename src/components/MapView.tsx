@@ -1,5 +1,5 @@
 import React, { useRef, useEffect, useCallback, useMemo } from 'react';
-import { StyleSheet, View, NativeSyntheticEvent } from 'react-native';
+import { StyleSheet, View, Text } from 'react-native';
 import {
   Map as MapLibreMap,
   Camera,
@@ -7,6 +7,9 @@ import {
   MapRef,
   CameraRef,
   ViewStateChangeEvent,
+  GeoJSONSource,
+  Layer,
+  Marker,
 } from '@maplibre/maplibre-react-native';
 import { Location, Waypoint, Route } from '../types';
 import {
@@ -14,7 +17,7 @@ import {
   NAVIGATION_CONFIG,
   ROUTE_COLORS,
   ROUTE_LINE_STYLE,
-  resolveMapStyle,
+  WAYPOINT_COLORS,
 } from '../constants';
 import {
   CUSTOM_MAP_STYLES,
@@ -65,12 +68,10 @@ export function MapView({
   // Resolve map style - handles both URL strings and custom style objects
   const resolvedMapStyle = useMemo(() => {
     if (typeof mapStyle === 'object') return mapStyle as any;
-    // Check if it's a custom style key
     const customStyleKeys = Object.keys(CUSTOM_MAP_STYLES) as CustomMapStyleKey[];
     if (customStyleKeys.includes(mapStyle as CustomMapStyleKey)) {
       return CUSTOM_MAP_STYLES[mapStyle as CustomMapStyleKey] as any;
     }
-    // Return URL string
     return mapStyle;
   }, [mapStyle]);
 
@@ -148,6 +149,105 @@ export function MapView({
         />
 
         <UserLocation />
+
+        {/* Alternative route (lighter) */}
+        {showRoute && alternativeRoute && alternativeRoute.geometry.coordinates.length > 0 && (
+          <>
+            <GeoJSONSource
+              id="alternative-route-source"
+              data={{
+                type: 'Feature',
+                geometry: {
+                  type: 'LineString',
+                  coordinates: alternativeRoute.geometry.coordinates,
+                },
+                properties: {},
+              }}
+            />
+            <Layer
+              id="alternative-route-casing"
+              type="line"
+              source="alternative-route-source"
+              paint={{
+                'line-color': '#FFFFFF',
+                'line-width': ROUTE_LINE_STYLE.width * 0.7 + 4,
+                'line-opacity': 0.4,
+              }}
+            />
+            <Layer
+              id="alternative-route-line"
+              type="line"
+              source="alternative-route-source"
+              layout={{
+                'line-cap': 'round',
+                'line-join': 'round',
+              }}
+              paint={{
+                'line-color': ROUTE_COLORS.alternative,
+                'line-width': ROUTE_LINE_STYLE.width * 0.7,
+                'line-opacity': 0.5,
+              }}
+            />
+          </>
+        )}
+
+        {/* Main route */}
+        {showRoute && route && route.geometry.coordinates.length > 0 && (
+          <>
+            <GeoJSONSource
+              id="main-route-source"
+              data={{
+                type: 'Feature',
+                geometry: {
+                  type: 'LineString',
+                  coordinates: route.geometry.coordinates,
+                },
+                properties: {},
+              }}
+            />
+            {/* Route casing (white border) */}
+            <Layer
+              id="main-route-casing"
+              type="line"
+              source="main-route-source"
+              paint={{
+                'line-color': ROUTE_LINE_STYLE.casingColor,
+                'line-width': ROUTE_LINE_STYLE.width + 4,
+                'line-opacity': ROUTE_LINE_STYLE.casingOpacity,
+              }}
+            />
+            {/* Main route line */}
+            <Layer
+              id="main-route-line"
+              type="line"
+              source="main-route-source"
+              layout={{
+                'line-cap': 'round',
+                'line-join': 'round',
+              }}
+              paint={{
+                'line-color': ROUTE_COLORS.default,
+                'line-width': ROUTE_LINE_STYLE.width,
+                'line-opacity': ROUTE_LINE_STYLE.opacity,
+              }}
+            />
+          </>
+        )}
+
+        {/* Waypoint markers */}
+        {showWaypoints && waypoints.map((waypoint) => (
+          <Marker
+            key={waypoint.id}
+            lngLat={[waypoint.longitude, waypoint.latitude] as LngLat}
+            onPress={() => onMarkerPress?.(waypoint)}
+          >
+            <View style={styles.waypointMarker}>
+              <Text style={styles.waypointIcon}>
+                {waypoint.icon || '📍'}
+              </Text>
+            </View>
+          </Marker>
+        ))}
       </MapLibreMap>
     </View>
   );
@@ -159,5 +259,23 @@ const styles = StyleSheet.create({
   },
   map: {
     flex: 1,
+  },
+  waypointMarker: {
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    backgroundColor: '#FF6B6B',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderWidth: 3,
+    borderColor: 'white',
+    elevation: 4,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.3,
+    shadowRadius: 4,
+  },
+  waypointIcon: {
+    fontSize: 16,
   },
 });

@@ -12,23 +12,11 @@ export type MapStyleKey = keyof typeof MAP_STYLES;
 export const MAP_STYLE_LABELS: Record<MapStyleKey, string> = {
   streets: 'Ruas',
   outdoor: 'Ar livre',
-  satellite: 'Satélite',
+  satellite: 'Claro',
   dark: 'Escuro',
-  bright: 'Claro',
+  bright: 'Solar',
   pastel: 'Pastel',
 };
-
-// Style resolution: handles both URL strings and custom style keys
-export function resolveMapStyle(styleOrKey: string): string | object {
-  // Check if it's a custom style key
-  const customKeys = ['losSantos', 'pipBoy', 'pixelMap', 'cyberpunk', 'retro', 'ocean'];
-  if (customKeys.includes(styleOrKey)) {
-    // Return null to indicate custom style - will be handled by caller
-    return styleOrKey;
-  }
-  // Return URL string
-  return styleOrKey;
-}
 
 export const ROUTE_COLORS = {
   default: '#4ECDC4',
