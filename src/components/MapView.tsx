@@ -104,6 +104,12 @@ export function MapView({
         dragPan
         touchZoom
         doubleTapZoom
+        onDidFailLoadingMap={(e: any) => {
+          console.warn('Map failed to load:', e);
+        }}
+        onDidFinishLoadingMap={() => {
+          console.log('Map loaded successfully');
+        }}
       >
         <Camera
           ref={cameraRef}

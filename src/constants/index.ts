@@ -1,5 +1,5 @@
 export const MAP_STYLES = {
-  streets: 'https://demotiles.maplibre.org/style.json',
+  streets: 'https://tiles.openfreemap.org/styles/liberty',
   outdoor: 'https://tiles.openfreemap.org/styles/liberty',
   satellite: 'https://tiles.openfreemap.org/styles/positron',
   dark: 'https://tiles.openfreemap.org/styles/dark',
